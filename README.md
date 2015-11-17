@@ -57,10 +57,10 @@ Data Source
 
 Example Of Main Object
 
-X Parm : "1, 2, 3, 4" - A String of a comma seperated list of values for this set of data. 
-Y Parm : "1, 2, 3, 4" - A String of a comma seperated list of values for this set of data.
-Mode : "markers" - String containing the type of chart you wish to display.
-name : "markersName" - String containing the name of this set of data. 
+- X Parm : "1, 2, 3, 4" - A String of a comma seperated list of values for this set of data. 
+- Y Parm : "1, 2, 3, 4" - A String of a comma seperated list of values for this set of data.
+- Mode : "markers" - String containing the type of chart you wish to display.
+- name : "markersName" - String containing the name of this set of data. 
 
 
 
