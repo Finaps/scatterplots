@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="scatterplots.widget.scatterplots" needsEntityContext="false" xmlns="http://www.mendix.com/widget/1.0/">
+    <name>scatterplots</name>
+    <description>This widget allows you to create scatter plot charts</description>
+
+    <icon />
+
+    <properties>
+        <property key="main" type="entity">
+            <caption>Main Object</caption>
+            <category>Data source</category>
+            <description>The searchEntity</description>
+        </property>
+        
+        <property key="nameParm" type="attribute" entityProperty="main">
+            <caption>name</caption>
+            <category>Data source</category>
+            <description>name</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        
+         <property key="xParm" type="attribute" entityProperty="main">
+            <caption>X Parm</caption>
+            <category>Data source</category>
+            <description>x</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        
+        <property key="yParm" type="attribute" entityProperty="main">
+            <caption>Y Parm</caption>
+            <category>Data source</category>
+            <description>y</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        
+        <property key="modeParm" type="attribute" entityProperty="main">
+            <caption>Mode</caption>
+            <category>Data source</category>
+            <description>y</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        
+         <property key="mfGetData" type="microflow" required="true" defaultValue="">
+            <caption>Data Source Microflow</caption>
+            <category>Data source</category>
+            <description>The microflow to retrieve a list of input data</description>
+            <returnType type="Object" isList="true" entityProperty="main"></returnType>
+        </property>
+        
+        
+        
+        
+    </properties>
+</widget>
+
