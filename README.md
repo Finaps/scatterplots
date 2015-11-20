@@ -1,7 +1,7 @@
 # Scatter Plots
 
 This widget gives you the ability to create a simple chart that can be easily changed and configurable via a mendix object rather than
-the widget configuration. Additionally giving users many options such as downloading the chart. 
+the widget configuration. Additionally giving users many options such as downloading the chart.  
 
 ##Authors
 
@@ -35,7 +35,7 @@ Main features:
 example Chart:
 
 
-<img src="readme/example.png"/>
+<img src="https://raw.githubusercontent.com/Finaps/scatterplots/master/readme/example.png"/>
 
 
 
