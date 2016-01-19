@@ -39,6 +39,33 @@
             </attributeTypes>
         </property>
         
+        <property key="typeParm" type="attribute" entityProperty="main">
+            <caption>Type Parm</caption>
+            <category>Data source</category>
+            <description>Type Parm</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        
+        <property key="xError" type="attribute" entityProperty="main">
+            <caption>X Error</caption>
+            <category>Data source</category>
+            <description>X Error</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        
+        <property key="yError" type="attribute" entityProperty="main">
+            <caption>Y Error</caption>
+            <category>Data source</category>
+            <description>Y Error</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        
         <property key="modeParm" type="attribute" entityProperty="main">
             <caption>Mode</caption>
             <category>Data source</category>

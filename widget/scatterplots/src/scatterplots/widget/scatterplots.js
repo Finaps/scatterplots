@@ -53,7 +53,10 @@ define([
         main: "",
         yParm: "",
         xParm: "", 
+        xError: "", 
+        yError: "", 
         modeParm: "",
+        typeParm: "", 
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _data: null,
@@ -107,14 +110,13 @@ define([
             }
 
             for (var i in objs) {
-                var newTrace = {
-                    name: objs[i].get(this.nameParm), 
-                    x : objs[i].get(this.xParm).split(","),
-                    y : objs[i].get(this.yParm).split(","),
-                    mode:  objs[i].get(this.modeParm),
-                }; 
-                
-                this._data.push(newTrace); 
+                var errorFlag = false; 
+                if(objs[i].get(this.xError) != '' || 
+                   objs[i].get(this.yError) != '' )
+                {
+                    errorFlag = true; 
+                }
+                this._data.push(this._makeTrace(objs[i] , errorFlag) ); 
             }
             
             Plotly.newPlot(this.domNode, this._data);
@@ -133,6 +135,40 @@ define([
                 "innerHTML": message
             });
             dojoConstruct.place(this.domNode, this._alertDiv);
+        },
+        
+        _makeTrace : function(obj, error){
+            var newTrace = ''; 
+            if(!error){
+                newTrace = { 
+                    name: obj.get(this.nameParm), 
+                    x : obj.get(this.xParm).split(","),
+                    y : obj.get(this.yParm).split(","),
+                    mode:  obj.get(this.modeParm), 
+                    type: obj.get(this.typeParm)
+                };
+            }
+            else{
+                newTrace = {
+                    name: obj.get(this.nameParm), 
+                    x : obj.get(this.xParm).split(","),
+                    y : obj.get(this.yParm).split(","),
+                    mode:  obj.get(this.modeParm),
+                    error_y: {
+                        type: 'data',
+                        array: obj.get(this.yError).split(","),
+                        visible: true
+                    },
+                    error_x: {
+                        type: 'data',
+                        array: obj.get(this.xError).split(","),
+                        visible: true
+                    },
+                    type: obj.get(this.typeParm)
+                };
+            }
+            
+            return newTrace; 
         },
 
         // Add a validation.
