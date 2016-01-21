@@ -32,13 +32,14 @@ define([
     "dojo/html",
     "dojo/_base/event",
     "scatterplots/lib/jquery-1.11.2",
-    "scatterplots/lib/scatter",
+//    "scatterplots/lib/scatter",
+    "plotly",
     "dojo/text!scatterplots/widget/template/scatterplots.html"
 ], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent,  _jQuery, Plotly, widgetTemplate) {
     "use strict";
 
     var $ = _jQuery.noConflict(true);
-    //var Plotly = scatter; 
+//    var Plotly = scatter; 
 
     // Declare widget's prototype.
     return declare("scatterplots.widget.scatterplots", [_WidgetBase, _TemplatedMixin], {
@@ -69,7 +70,7 @@ define([
 
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
-            console.log(this.id + ".postCreate");
+            window.console.log(this.id + ".postCreate");
             this._updateRendering();
             this._setupEvents();
         },
@@ -88,7 +89,7 @@ define([
 
         // Rerender the interface.
         _updateRendering: function () {
-            console.log("Scatter Plot - getting data");
+            window.console.log("Scatter Plot - getting data");
             mx.data.action({
                 params: {
                     actionname: this.mfGetData
@@ -99,14 +100,15 @@ define([
         },
 
         _makeGraph: function (objs) {
-            console.log("Scatter Plot - got data, making Graph");
+            window.console.log("Scatter Plot - got data, making Graph");
             
-            if(objs.length == 0){ //data checker 
+            if(objs.length === 0) { //data checker 
                 $(this.domNode).html("no data to show");
-                return; 
+                return;
             }
+            var i;
 
-            for (var i in objs) {
+            for (i = 0; i < objs.length;  i += 1) {
                 var newTrace = {
                     name: objs[i].get(this.nameParm), 
                     x : objs[i].get(this.xParm).split(","),
@@ -144,6 +146,9 @@ define([
     });
 });
 
-require(["scatterplots/widget/scatterplots"], function () {
+require({
+    packages: [{ name: "plotly", location: "../../widgets/scatterplots/lib", main: "plotly-latest.min" }]
+}, ["scatterplots/widget/scatterplots"
+   ], function () {
     "use strict";
 });
