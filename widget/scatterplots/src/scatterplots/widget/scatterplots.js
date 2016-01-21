@@ -34,7 +34,7 @@ define([
     "scatterplots/lib/jquery-1.11.2",
     "scatterplots/lib/scatter",
     "dojo/text!scatterplots/widget/template/scatterplots.html"
-], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent,  _jQuery, Plotly, widgetTemplate) {
+], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, _jQuery, Plotly, widgetTemplate) {
     "use strict";
 
     var $ = _jQuery.noConflict(true);
@@ -52,11 +52,13 @@ define([
         mfGetData: "",
         main: "",
         yParm: "",
-        xParm: "", 
-        xError: "", 
-        yError: "", 
+        xParm: "",
+        xError: "",
+        yError: "",
         modeParm: "",
-        typeParm: "", 
+        bubbleSize: "",
+        typeParm: "",
+        chartChoice: "",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _data: null,
@@ -77,7 +79,7 @@ define([
             this._setupEvents();
         },
 
-        
+
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
         uninitialize: function () {
             // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
@@ -103,22 +105,25 @@ define([
 
         _makeGraph: function (objs) {
             console.log("Scatter Plot - got data, making Graph");
-            
-            if(objs.length == 0){ //data checker 
+
+            if (objs.length == 0) { //data checker 
                 $(this.domNode).html("no data to show");
-                return; 
+                return;
             }
 
             for (var i in objs) {
-                var errorFlag = false; 
-                if(objs[i].get(this.xError) != '' || 
-                   objs[i].get(this.yError) != '' )
-                {
-                    errorFlag = true; 
+                var errorFlag = false,
+                    isBubble = false;
+                if (this.bubbleSize != '') {
+                    isBubble = true;
                 }
-                this._data.push(this._makeTrace(objs[i] , errorFlag) ); 
+                if (objs[i].get(this.xError) != '' ||
+                    objs[i].get(this.yError) != '') {
+                    errorFlag = true;
+                }
+                this._data.push(this._makeTrace(objs[i], errorFlag, isBubble));
             }
-            
+
             Plotly.newPlot(this.domNode, this._data);
 
 
@@ -136,39 +141,81 @@ define([
             });
             dojoConstruct.place(this.domNode, this._alertDiv);
         },
-        
-        _makeTrace : function(obj, error){
-            var newTrace = ''; 
-            if(!error){
-                newTrace = { 
-                    name: obj.get(this.nameParm), 
-                    x : obj.get(this.xParm).split(","),
-                    y : obj.get(this.yParm).split(","),
-                    mode:  obj.get(this.modeParm), 
-                    type: obj.get(this.typeParm)
-                };
+
+        _makeTrace: function (obj, error, bubble) {
+            var newTrace = '';
+            if (!error) {
+                if (!bubble) {
+
+                    newTrace = {
+                        name: obj.get(this.nameParm),
+                        x: obj.get(this.xParm).split(","),
+                        y: obj.get(this.yParm).split(","),
+                        mode: obj.get(this.modeParm),
+                        type: obj.get(this.typeParm)
+                    };
+
+                } else {
+
+                    newTrace = {
+                        name: obj.get(this.nameParm),
+                        x: obj.get(this.xParm).split(","),
+                        y: obj.get(this.yParm).split(","),
+                        mode: obj.get(this.modeParm),
+                        type: obj.get(this.typeParm),
+                        marker: {
+                            size: obj.get(this.bubbleSize).split(",")
+                        }
+                    };
+
+                }
+            } else {
+                if (!bubble) {
+
+                    newTrace = {
+                        name: obj.get(this.nameParm),
+                        x: obj.get(this.xParm).split(","),
+                        y: obj.get(this.yParm).split(","),
+                        mode: obj.get(this.modeParm),
+                        error_y: {
+                            type: 'data',
+                            array: obj.get(this.yError).split(","),
+                            visible: true
+                        },
+                        error_x: {
+                            type: 'data',
+                            array: obj.get(this.xError).split(","),
+                            visible: true
+                        },
+                        type: obj.get(this.typeParm)
+                    };
+
+                } else {
+
+                    newTrace = {
+                        name: obj.get(this.nameParm),
+                        x: obj.get(this.xParm).split(","),
+                        y: obj.get(this.yParm).split(","),
+                        mode: obj.get(this.modeParm),
+                        error_y: {
+                            type: 'data',
+                            array: obj.get(this.yError).split(","),
+                            visible: true
+                        },
+                        error_x: {
+                            type: 'data',
+                            array: obj.get(this.xError).split(","),
+                            visible: true
+                        },
+                        type: obj.get(this.typeParm),
+                        marker: {
+                            size: obj.get(this.bubbleSize).split(",")
+                        }
+                    };
+                }
             }
-            else{
-                newTrace = {
-                    name: obj.get(this.nameParm), 
-                    x : obj.get(this.xParm).split(","),
-                    y : obj.get(this.yParm).split(","),
-                    mode:  obj.get(this.modeParm),
-                    error_y: {
-                        type: 'data',
-                        array: obj.get(this.yError).split(","),
-                        visible: true
-                    },
-                    error_x: {
-                        type: 'data',
-                        array: obj.get(this.xError).split(","),
-                        visible: true
-                    },
-                    type: obj.get(this.typeParm)
-                };
-            }
-            
-            return newTrace; 
+
+            return newTrace;
         },
 
         // Add a validation.
